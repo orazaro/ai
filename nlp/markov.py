@@ -34,6 +34,15 @@ def read(lm, ngrams):
         for word in words:
             eat_next(lm, word.lower(), input)
 
+def select(wdic):
+    n = 0
+    sel = []
+    for k in wdic:
+        for i in range(wdic[k]):
+            sel.append(k)
+    n = random.randint(0,len(sel)-1)
+    return sel[n]
+
 def generate(lm, keys, input = []):
     if not input:
         n = random.randint(0,len(keys)-1)
@@ -43,18 +52,14 @@ def generate(lm, keys, input = []):
             input.append(w)
     else:
         key = '_'.join(input)
+    if key not in lm:
+        return 'END'
     #print key, lm[key]
     p = lm[key]
-    n = 0
-    sel = []
-    for k in p:
-        for i in range(p[k]):
-            sel.append(k)
-    n = random.randint(0,len(sel)-1)
-    word = sel[n]
+    word = select(p)
     input.pop(0)
     input.append(word)
-    if len(sel) > 1:
+    if len(p) > 1:
         return '*'+word
     return word
 
@@ -69,7 +74,10 @@ for key in language_model:
     keys.append(key)
     #print key, language_model[key]
 input = []
-while True:
-    word = generate(language_model, keys, input)
-    print word,
-
+word = 'START'
+try:
+    while word != 'END':
+        word = generate(language_model, keys, input)
+        print word,
+except:
+    print ' ABORTED'
