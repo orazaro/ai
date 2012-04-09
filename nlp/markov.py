@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
-import sys, fileinput, random
+import sys, random
 
 alpha = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
-def eat_next(lm, word, input):
-    key = '_'.join(input)
+def eat_next(lm, word, phrase):
+    key = '_'.join(phrase)
     #print key
     if key in lm:
         p = lm[key]
@@ -16,11 +16,11 @@ def eat_next(lm, word, input):
     else:
         lm[key] = {}
         lm[key][word] = 1
-    input.pop(0)
-    input.append(word)
+    phrase.pop(0)
+    phrase.append(word)
 
 def read(lm, ngrams):
-    input = ['none'] * (ngrams - 1)
+    phrase = ['none'] * (ngrams - 1)
     for line in sys.stdin:
         words = []
         word = ''
@@ -32,7 +32,7 @@ def read(lm, ngrams):
                     words.append(word)
                     word = ''
         for word in words:
-            eat_next(lm, word.lower(), input)
+            eat_next(lm, word.lower(), phrase)
 
 def select(wdic):
     n = 0
@@ -43,22 +43,22 @@ def select(wdic):
     n = random.randint(0,len(sel)-1)
     return sel[n]
 
-def generate(lm, keys, input = []):
-    if not input:
+def generate(lm, keys, phrase = []):
+    if not phrase:
         n = random.randint(0,len(keys)-1)
         key = keys[n]
         words = key.split('_')
         for w in words:
-            input.append(w)
+            phrase.append(w)
     else:
-        key = '_'.join(input)
+        key = '_'.join(phrase)
     if key not in lm:
         return 'END'
     #print key, lm[key]
     p = lm[key]
     word = select(p)
-    input.pop(0)
-    input.append(word)
+    phrase.pop(0)
+    phrase.append(word)
     if len(p) > 1:
         return '*'+word
     return word
@@ -73,11 +73,11 @@ keys = []
 for key in language_model:
     keys.append(key)
     #print key, language_model[key]
-input = []
+phrase = []
 word = 'START'
 try:
     while word != 'END':
-        word = generate(language_model, keys, input)
+        word = generate(language_model, keys, phrase)
         print word,
 except:
     print ' ABORTED'
