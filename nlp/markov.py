@@ -43,7 +43,7 @@ def select(wdic):
     n = random.randint(0,len(sel)-1)
     return sel[n]
 
-def generate(lm, keys, phrase = []):
+def generate(lm, keys, phrase):
     if not phrase:
         n = random.randint(0,len(keys)-1)
         key = keys[n]
@@ -67,12 +67,11 @@ def generate(lm, keys, phrase = []):
 ngrams = 4
 if len(sys.argv) > 1:
     ngrams = int(sys.argv[1])
+
 language_model = {}
 read(language_model, ngrams)
-keys = []
-for key in language_model:
-    keys.append(key)
-    #print key, language_model[key]
+
+keys = language_model.keys()
 phrase = []
 word = 'START'
 try:
@@ -81,3 +80,4 @@ try:
         print word,
 except:
     print ' ABORTED'
+
