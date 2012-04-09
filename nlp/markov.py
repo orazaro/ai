@@ -21,7 +21,6 @@ def eat_next(lm, word, input):
 
 def read(lm, ngrams):
     input = ['none'] * (ngrams - 1)
-    #for line in fileinput.input():
     for line in sys.stdin:
         words = []
         word = ''
@@ -55,6 +54,8 @@ def generate(lm, keys, input = []):
     word = sel[n]
     input.pop(0)
     input.append(word)
+    if len(sel) > 1:
+        return '*'+word
     return word
 
 
