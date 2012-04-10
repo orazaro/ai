@@ -20,7 +20,7 @@ def eat_next(lm, word, phrase):
     phrase.append(word)
 
 def read(lm, ngrams):
-    phrase = ['none'] * (ngrams - 1)
+    phrase = ['<UNK>'] * (ngrams - 1)
     for line in sys.stdin:
         words = []
         word = ''
@@ -53,7 +53,7 @@ def generate(lm, keys, phrase):
     else:
         key = '_'.join(phrase)
     if key not in lm:
-        return 'END'
+        return '<END>'
     #print key, lm[key]
     p = lm[key]
     word = select(p)
@@ -73,11 +73,11 @@ read(language_model, ngrams)
 
 keys = language_model.keys()
 phrase = []
-word = 'START'
+word = '<START>'
 try:
-    while word != 'END':
+    while word != '<END>':
         word = generate(language_model, keys, phrase)
         print word,
 except:
-    print ' ABORTED'
+    print ' <ABORTED>'
 
