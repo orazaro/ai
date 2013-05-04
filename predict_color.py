@@ -4,6 +4,9 @@
 # after your guess card is shown
 #
 # wining strategy: if so far reds was less than blacks guess red, else pass
+# it works if summarize winning reds, but if you win/lose after first selection
+# and finally must select last card if do not selected before: 
+# no winning strategy
 
 import random
 import numpy as np
