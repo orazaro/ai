@@ -11,7 +11,7 @@ import numpy as np
 random.seed()
 
 n = 52
-m = 1000
+m = 100000
 scores = []
 for j in range(m):
     cards = range(n)
@@ -20,10 +20,11 @@ for j in range(m):
     score = 0
     sum = 0
     for i in range(n):
-        if sum < 0:
+        if sum < 0 or i == n-1:
             score += reds[i]
+            break
         sum += reds[i]
-    print "%d" % score,
+    #print "%d" % score,
     scores.append(score)
 print
 scores = np.array(scores)
